@@ -1,0 +1,33 @@
+-Devlog 04/28
+	-Moved the command "grids.Add(newBox);" to be inside of the for. The project would not even the way was before.
+	-Moved console write information used for debug to be insie #if DEBUG tag, this way the final player will not get those messages.
+	-Created a new class to handle random number
+		-based on SOLID, this class is the single point on the system to take care to generate random values and seed.
+		-since this class can be acessed from anyware from the same seed generated before, I utilized also a Singleton pattern.
+		-If needed in the future, could have a method to pass a seed
+		-Summary added to help in documentation of the class
+		-For a cleaner code, I started using body method for methods that had only 1 line.
+		-Added a alias in the using of Program class for the new created Random
+		-New Next method to encapsulate SystemRandom
+			-3 Overflows se we could get all System Random Calls
+			
+	-The method GetRandomInit inside Program was not beign called anyware, also we moved that logic to be inside our constructor to the new Random class. So this method was erased.
+			
+	-Created a new constructor for the Grid class with no parameters, this way if we don't want to select the size of the grid, the game will create for us with random values.
+	-Created a new Data folder to hold data (.json) structure classes
+		-This could be renamed based on the size and proportion the project could take
+	-Within the new folder, I created a new settings.json file to hold some settings of the game, such as minimum and maximum grid size
+		-I could have used the default app.settings file, but since the project was created using .net core I prefered to stick with json for portability.
+		-Changed the new setting file for copy always, so we don't have any problem if we decide to publish this in the future.
+		-Depending on the size and proportion our game take, we could configure this folder to always create a minified version for every JSON file automatcly on each publish.
+	-Created a new structure inside the new Setting json file to hold information on the min and max size for the grid.
+	
+	-Installed via Nuget the packages "Microsoft.Extensions.Configuration" and "Microsoft.Extensions.Configuration.Json" so we could load our configutarion Json file on the Startup method that will be called inside the setup using the methods provided by microsoft.
+	
+	-The program class should be only responsable for initializing our game, and if needed, do some configuration for the .net application to correctly run. So I moved out the entire code that we have before into a new structure.
+		-With the new Microsoft.Extensions.Configuration, we load the settings file into a new static structure that can be accessed and modified accross all the game.
+			-If we want in the future to the player be able to change those values, we needed a classe to save the information from the static structure to the json file.
+			
+		
+		
+		

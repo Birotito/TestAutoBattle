@@ -4,6 +4,8 @@ using static AutoBattle.Grid;
 using System.Collections.Generic;
 using System.Linq;
 using static AutoBattle.Types;
+using Random = AutoBattle.Core.Random;
+using Microsoft.Extensions.Configuration;
 
 namespace AutoBattle
 {
@@ -20,6 +22,10 @@ namespace AutoBattle
             List<Character> AllPlayers = new List<Character>();
             int currentTurn = 0;
             int numberOfPossibleTiles = grid.grids.Count;
+
+            //TODO: mudar para uma estrutura estática.
+            var AppName = new ConfigurationBuilder().AddJsonFile("Data\\Settings.json").Build().GetSection("GridSetting")["MinYSize"];
+
             Setup(); 
 
 
@@ -74,8 +80,7 @@ namespace AutoBattle
             void CreateEnemyCharacter()
             {
                 //randomly choose the enemy class and set up vital variables
-                var rand = new Random();
-                int randomInteger = rand.Next(1, 4);
+                int randomInteger = Random.Instance.Next(1, 4);
                 CharacterClass enemyClass = (CharacterClass)randomInteger;
                 Console.WriteLine($"Enemy Class Choice: {enemyClass}");
                 EnemyCharacter = new Character(enemyClass);
@@ -137,13 +142,6 @@ namespace AutoBattle
                     ConsoleKeyInfo key = Console.ReadKey();
                     StartTurn();
                 }
-            }
-
-            int GetRandomInt(int min, int max)
-            {
-                var rand = new Random();
-                int index = rand.Next(min, max);
-                return index;
             }
 
             void AlocatePlayers()
