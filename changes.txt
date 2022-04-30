@@ -24,9 +24,38 @@
 	
 	-Installed via Nuget the packages "Microsoft.Extensions.Configuration" and "Microsoft.Extensions.Configuration.Json" so we could load our configutarion Json file on the Startup method that will be called inside the setup using the methods provided by microsoft.
 	
+	-**Template Pattern	
+		-For Data structure I will use a Template Pattern, which means that every class will have one interface
+			-Even for the most basic data class this is helpful if we need to create different classes for loading and saving data, following SOLID, each class needs to hold a single responsability.
+			-Also if our project grows and we start to use unit or integration tests, having this already well structured and defined will help.
+	
+	-Creation of interface for the settings, and a class using the interface that will get the information from the json file.
+	-The class has also a method to retrieve information from the IConfiguration that will load from Json and pass it to the properties. This method violates SOLID principles since the name of the properties are used in the method, but since this should not be changed often, for now should be ok.
+	
+	-Create a new const variable at the root of program class to hold the path to the settings folder. This path could be passed as argument when starting the project, but since I'm not sure on how the setting the game will be played, will be easier to test if we would the variale for now.
+	
+	
+	-*Project organization
+		-It's easier to navigate and find code when we have less hierarchy of folder, so I choose to keep it simples with a single folder format, when the project grows, this can be reviewed to a best structure, maybe even break the project into smaller one each responsible for a service.
+	
+	
 	-The program class should be only responsable for initializing our game, and if needed, do some configuration for the .net application to correctly run. So I moved out the entire code that we have before into a new structure.
 		-With the new Microsoft.Extensions.Configuration, we load the settings file into a new static structure that can be accessed and modified accross all the game.
-			-If we want in the future to the player be able to change those values, we needed a classe to save the information from the static structure to the json file.
+		-If we want in the future to the player be able to change those values, we needed a classe to save the information from the static structure to the json file.
+		
+	-Changed the method Setup to be responsible to load the settings information and handle any load that is necessary for the game to start
+		-The main method had all the methods defined insite it, only calls the method setup, and after the setup calls the method StartGame in the new class that will be created to handle this.
+		-Added a try cath block for exception handling. This can be further devolep in the future to save log files in case of error for easier debug.
+		
+	-Creation of a satic GameManager class that will be responsible for managing all the game
+		-Given the simplicity of the game, a state machine will not be needed, but could be used here to store in what state the game current is.
+		-From here we call each class and method responsible for each step in the gameplay.
+		-If is a new game we will call a class that is responsible for the main menu. Even if the menu now is really simple, we can further expand this in the future in case we want to add new game options, load or save, or even change our settings file from within the game.
+		
+	-**GameManager
+		-Following the SOLID principles, each class needs to have a single responsability in the game process, so for each step needed for the game a classs will be created, such as Menu, New Game, Setup, Battlefield Drawing, Combat, Game Over, etc.
+		-Game manager will be responsible to call each one of those classes as needed. Since the classes will be called from GM, and not them calling GM, it don't make sense to use Singleton pattern in GM, just leaving is static is enough.
+		
 			
 		
 		

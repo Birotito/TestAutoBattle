@@ -11,6 +11,10 @@ namespace AutoBattle.Core
         /// Using Lazy<T> will make sure that the object is only instantiated when it is used somewhere in the calling code.
         /// </summary>
         private static readonly Lazy<Random> lazy = new Lazy<Random>(() => new Random());
+
+        /// <summary>
+        /// Instance for Singleton Pattern
+        /// </summary>
         public static Random Instance { get { return lazy.Value; } }
 
         public System.Random m_Random { get; set; }
