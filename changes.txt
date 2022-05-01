@@ -1,62 +1,134 @@
--Devlog 04/28
-	-Moved the command "grids.Add(newBox);" to be inside of the for. The project would not even the way was before.
-	-Moved console write information used for debug to be insie #if DEBUG tag, this way the final player will not get those messages.
-	-Created a new class to handle random number
-		-based on SOLID, this class is the single point on the system to take care to generate random values and seed.
-		-since this class can be acessed from anyware from the same seed generated before, I utilized also a Singleton pattern.
-		-If needed in the future, could have a method to pass a seed
-		-Summary added to help in documentation of the class
-		-For a cleaner code, I started using body method for methods that had only 1 line.
-		-Added a alias in the using of Program class for the new created Random
-		-New Next method to encapsulate SystemRandom
-			-3 Overflows se we could get all System Random Calls
+TODO: name convention
+
+• Devlog (04/28)
+
+- Moved the command "grids.Add(newBox);" to be inside of the FOR. The project would not even be the way was before.
+- Moved console write information used for debugging to be inside #if DEBUG tag, this way the final player will not get those messages.
+- Created a new class to handle a random number:
+	1. based on SOLID, this class is the single point on the system to take care to generate random values and seeds;
+	2. since this class can be accessed from anywhere from the same seed generated before, I utilized also a Singleton pattern;
+	3. if needed in the future, could have a method to pass a seed;
+	4. summary added to help in documentation of the class;
+	5. for a cleaner code, I started using the body method for methods that had only 1 line;
+	6. added an alias in the use of Program class for the new created Random;
+	7. new Next method to encapsulate SystemRandom;
+	8. -3 Overflows so we could get all System Random Calls.
 			
-	-The method GetRandomInit inside Program was not beign called anyware, also we moved that logic to be inside our constructor to the new Random class. So this method was erased.
-			
-	-Created a new constructor for the Grid class with no parameters, this way if we don't want to select the size of the grid, the game will create for us with random values.
-	-Created a new Data folder to hold data (.json) structure classes
-		-This could be renamed based on the size and proportion the project could take
-	-Within the new folder, I created a new settings.json file to hold some settings of the game, such as minimum and maximum grid size
-		-I could have used the default app.settings file, but since the project was created using .net core I prefered to stick with json for portability.
-		-Changed the new setting file for copy always, so we don't have any problem if we decide to publish this in the future.
-		-Depending on the size and proportion our game take, we could configure this folder to always create a minified version for every JSON file automatcly on each publish.
-	-Created a new structure inside the new Setting json file to hold information on the min and max size for the grid.
+- The method GetRandomInit inside Program was not being called anywhere, also we moved that logic to be inside our constructor to the new Random class. So this method was erased.
+- Created a new constructor for the Grid class with no parameters, this way if we don't want to select the size of the grid, the game will create for us with random values.
+- Created a new Data folder to hold data (.json) structure and classes. 
+	IMP: This could be renamed based on the size and proportion the project could take.
+
+- Within the new folder, I created a new settings.json file to hold some settings of the game, such as minimum and maximum grid size.
+- I could have used the default app.settings file, but since the project was created using .net core I preferred to stick with JSON for portability.
+- Changed the new setting file for copy always, so we don't have any problem if we decide to publish this in the future.
+	IMP: Depending on the size and proportion our game take, we could configure this folder to always create a minified version for every JSON file automatically on each publish.
+
+- Created a new structure inside the new Setting JSON file to hold information on the min and max size for the grid.
+- Installed via Nuget the packages "Microsoft.Extensions.Configuration" and "Microsoft.Extensions.Configuration.Json" so we could load our configuration Json file on the Startup method that will be called inside the setup using the methods provided by Microsoft.
 	
-	-Installed via Nuget the packages "Microsoft.Extensions.Configuration" and "Microsoft.Extensions.Configuration.Json" so we could load our configutarion Json file on the Startup method that will be called inside the setup using the methods provided by microsoft.
+
+
+✦ Template Pattern
 	
-	-**Template Pattern	
-		-For Data structure I will use a Template Pattern, which means that every class will have one interface
-			-Even for the most basic data class this is helpful if we need to create different classes for loading and saving data, following SOLID, each class needs to hold a single responsability.
-			-Also if our project grows and we start to use unit or integration tests, having this already well structured and defined will help.
+- For Data structure I will use a Template Pattern, which means that every class will have one interface.
+- Even for the most basic data class this is helpful if we need to create different classes for loading and saving data, following SOLID, each class needs to hold a single responsibility.
+- Also if our project grows and we start to use unit or integration tests, having this already well structured and defined will help.
+- Creation of an interface for the settings, and a class using the interface that will get the information from the JSON file.
+- The class has also a method to retrieve information from the IConfiguration that will load from JSON and pass it to the properties. This method violates SOLID principles since the name of the properties is used in the method, but since this should not be changed often, for now, should be ok.
+- Create a new CONST variable at the root of the program class to hold the path to the settings folder. This path could be passed as an argument when starting the project, but since I'm not sure how the setting of the game will be played, will be easier to test if we would the variable for now.
+- [TextLoader] After the creation of the TextLoader logic, I changed the settings interface to inherit from a base one, check the document below:
 	
-	-Creation of interface for the settings, and a class using the interface that will get the information from the json file.
-	-The class has also a method to retrieve information from the IConfiguration that will load from Json and pass it to the properties. This method violates SOLID principles since the name of the properties are used in the method, but since this should not be changed often, for now should be ok.
+
 	
-	-Create a new const variable at the root of program class to hold the path to the settings folder. This path could be passed as argument when starting the project, but since I'm not sure on how the setting the game will be played, will be easier to test if we would the variale for now.
-	
-	
-	-*Project organization
-		-It's easier to navigate and find code when we have less hierarchy of folder, so I choose to keep it simples with a single folder format, when the project grows, this can be reviewed to a best structure, maybe even break the project into smaller one each responsible for a service.
-	
-	
-	-The program class should be only responsable for initializing our game, and if needed, do some configuration for the .net application to correctly run. So I moved out the entire code that we have before into a new structure.
-		-With the new Microsoft.Extensions.Configuration, we load the settings file into a new static structure that can be accessed and modified accross all the game.
-		-If we want in the future to the player be able to change those values, we needed a classe to save the information from the static structure to the json file.
+✦ Project organization
+
+- It's easier to navigate and find code when we have less hierarchy of folders, so I choose to keep it simple with a single folder format. When the project grows, this can be reviewed to the best structure, maybe even break the project into smaller ones each responsible for a service.
+- The program class should be only responsible for initializing our game, and if needed, doing some configuration for the .net application to correctly run. I moved out the entire code that we have before into a new structure, so:
+	1. with the new Microsoft.Extensions.Configuration, we load the settings file into a new static structure that can be accessed and modified across all the game;
+	2. if we want the future player to be able to change those values, we needed a class to save the information from the static structure to the JSON file.
 		
-	-Changed the method Setup to be responsible to load the settings information and handle any load that is necessary for the game to start
-		-The main method had all the methods defined insite it, only calls the method setup, and after the setup calls the method StartGame in the new class that will be created to handle this.
-		-Added a try cath block for exception handling. This can be further devolep in the future to save log files in case of error for easier debug.
+- Changed the method SETUP to be responsible to load the settings information and handle any load that is necessary for the game to start.
+- The MAIN method had all the methods defined inside it, now only calls the SETUP method, and after the SETUP calls the method StartGame in the new class that will be created to handle this.
+- Added a try-catch block for exception handling. This can be further developed in the future to save log files in case of an error for easier debugging.
+- Creation of a static GameManager class that will be responsible for managing all the game.
+- Given the simplicity of the game, a state machine will not be needed but could be used here to store in what state the game currently is.
+- From here we call each class and method responsible for each step in the gameplay.
+- It's a new game we will call a class that is responsible for the main menu. Even if the menu now is really simple, we can further expand this in the future in case we want to add new game options, load or save, or even change our settings file from within the game.
+- Created a new folder and namespace for classes that will be responsible for the game behaviors.
+
 		
-	-Creation of a satic GameManager class that will be responsible for managing all the game
-		-Given the simplicity of the game, a state machine will not be needed, but could be used here to store in what state the game current is.
-		-From here we call each class and method responsible for each step in the gameplay.
-		-If is a new game we will call a class that is responsible for the main menu. Even if the menu now is really simple, we can further expand this in the future in case we want to add new game options, load or save, or even change our settings file from within the game.
-		
-	-**GameManager
-		-Following the SOLID principles, each class needs to have a single responsability in the game process, so for each step needed for the game a classs will be created, such as Menu, New Game, Setup, Battlefield Drawing, Combat, Game Over, etc.
-		-Game manager will be responsible to call each one of those classes as needed. Since the classes will be called from GM, and not them calling GM, it don't make sense to use Singleton pattern in GM, just leaving is static is enough.
-		
-			
-		
-		
-		
+✦ GameManager
+
+- Following the SOLID principles, each class needs to have a single responsibility in the game process, so for each step needed for the game a class will be created, such as Menu, New Game, Setup, Battlefield Drawing, Combat, Game Over, etc.
+- Game manager will be responsible to call each one of those classes as needed. Since the classes will be called from GM, and not them calling GM, it doesn't make sense to use the Singleton pattern in GM, just leaving it static is enough.
+
+✦ GameBehavior
+
+- Every class that will be called from the GameManager will inherit the same IBehavior interface, even though their methods can differ a lot, they all are used as game behavior, this can be used to help for unit and integration tests, also if we want to create a logging functionality for debugging, would help to implement that.
+- It will also help us to keep the GM class open for new behavior classes without needing to change it, following the SOLID principle
+- It defines START and END methods that will be called in every behavior class, this way we know when they have started or finished what it has to do, and also if we ever need to use Event patterns to call for multi-thread between behavior, this can help.
+	-> Note: Also if in the future we see the need to further increase this system to be a state machine, we can reuse this structure
+- Will have a private property for each behavior it needs to call, with the type of the IBehavior to not be strongly typed, so we actually don't care about the class that is being called, this way we can use an automated test class, also if your logic calls for different implementation classes for the Behavior, we don't care since we just are orchestrating the calls here.
+	-> Note: I used a private prop instead of a private field to keep defined convention, and also to help with abstraction, tests, and debugging.
+
+✦ NewGame
+
+- New class was created inherited from IBehavior to handle the new game, such as getting input from the user, setting up things, and preparing for battle.
+- To start a new game, we will set the battlefield size, get the player name and let it choose a class.
+- [CurrentGame] This class will load and initiate what is needed for the game to start, and then give it back to game manager, so I created a private field for each information that is needed, this way we don't have two times the object allocated in the memory
+- [CurrentGame] Also was created to return each individual private field as asked, this way we could handle each sepparated step of the new game class.
+- [CurrentGame] We could even go further and break this class into smaller one, each responsible for a function in a new game (get player name, get character, get grid information), but at this point would only added a non necessary complexity.
+
+✦ Gamification
+
+- When we are focused in create the core mechanics of the game we tend to be straight to the point, and often forget to input some gamification and fun features that the player will enjoy, so with that in mind the messages for the will the player will be rewritten to add a little more flavor and to be friendlier.
+- Also at the start of a new game, the game will briefly explain the rules to the player.
+
+✦ Texts
+
+- Most often the person who writes the text that the player will read is not the developer, so we should be able to easily change that without the need to go through a bunch of code and classes.
+- Not only that, if we want to implement localization, often we need to find between a database or different language files which one is correct. This game will not have localization for now, but it makes total sense to create a class to get the correct text for each interaction.
+- With all that in mind, a JSON file will be created to have the texts that the player will see, a new class Text will be created so we can get the text from the JSON file and be able to use it in the game, and a class for message handling will be created so we cand send messages to the player, and also get their response if is needed.
+
+- In the JSON we have two structures, one where we just want to show some text, so we have an array to store those texts that will be shown to the player, but we also have a message input text, that is when we expect the player to give us an answer, so we can also define an answer in case the player input something that we are not expecting.
+- In the JSON we have several structures. Each screen will be an object, that needs a matching class name in the game, and inside it several subsequent objects that have multiple messages. Those objects can be different between player input, multiple options, simple messages, etc.
+- A new class and interface will be created in the model for each behavior that needs text, likewise said in the document before.
+- A base ITextMessage interface was created, any time we need a new kind of text message (multiple options, input, or any other thing), we are inert from this base interface. And then, each behavior text class takes care of what kind of text message it's needed
+- If we need a new type of message in the future, this structure can be easily added without interfering with what is already working (SOLID principles at its best!)
+- The interface and class that will handle the messages for each behavior have a matching name with the tag in the JSON file, and also one (or several) lists with a class that implements a version from ITextMessage, this way, each class knows what kind of message is needed, and the behavior class knows which one to calls during the gameplay.
+
+✦ TextLoader
+
+- New class created in the core folder and namespace responsible to load the texts from the JSON file into the respective data class
+- This class has a dynamic data message class, and will be instantiated in each behavior, so each behavior handles its own data class name, also handles when to hold memory along with this instance or release it. 
+	-> NOTE: this way, the responsibility of this class is ONLY to load the JSON file into its internal object, and return the messages when asked.
+	- We don't care who is calling, when or what type, as long as we find the correct data class name and structure in the JSON file. SOLID attacks again!
+	- We could further develop this class to get multiple paths for multiple files responsible for data holding of the game, but right now we don't have this need, the game is still very simple and doesn't load/save anything.
+- Added the path and name of the JSON file containing the text into the settings file and structure, this way if in the future we want this file to be an indifferent place, or even we change that in runtime, we have a place to know where is it.
+- Similar to the Grid Settings, a new class, interface, and call to load the settings in the program class was added. (IMessageTextFileSettings and MessageTextFileSettings)
+- I Realize now we can have multiple types of settings, so makes sense to have the main interface for the settings with the common things (singleton instance and configure method), so I created this new interface to be used in the new text loader settings, and also changed the GridSettings.
+
+✦ PlayerMessageHandler
+
+- Now we have the structure built with the texts to show to the player, but we still need someone to handle showing this in the corret manner, and getting the inputs when needed from the player, that's why we will create this class.
+- It will be called from the behavior when we need to show or get something to the player, this way the behavior is responsible to let this class know what needs to be exhibit on the screen throug the TextLoader object that has loaded.
+- We could create a class to handle writting and another to get the player input, but since our game is still very simply, we don't need this kind of complexity. To keep things simple as is needed is also something good.
+- Since we can show message to the player at almost evert time, makes sense to turn this class into a Singleton. 
+- Added method to show messages from a list and get input (for the name).
+
+
+ ✦ CurrentGame
+ 
+ - Until now, all the information needed for one game session such as Grid, PlayerCharacter, EnemyCharacter, Status, current play, position and so on was scarced around all the code, and each class was doing something with it in a very confusing manner.
+ - This class will hold in a single access point all the information needed for one game session to be able to run. The information will be handled, providad and updated by each behaviour class that is responsible for something in the gameplay, but everyone will acess here in the same place.
+ - Along with the GameManager that works as a hub to call each Behavior needed to the gameplay, here will be stored all the information needed to the gameplay, so make sense that the Game Manager hold the instance of this class and be responsible for it.
+ - NewGame Class is responsible to fill what is needed for us to start the game, so the information that we are getting there from the player (Name, choosen character, grid information) will be stored here, also all that is needed to be automatically generated will be handled by that class and stored here.
+ - Since this class is not supposed to have any logic in it, since will be handled be the game behaviors, it makes sense that this class is under Model folder and namespace, and like before, it will also have an interface to define the properties.
+ - Player and enemy character could be a list to work like a team, but since the should is only 1x1 at this point, a single reference was made.
+ - The Player name is stored in Character class and also here, which is not so good since we have the same information twice, but for me makes sense to keep this outside character, if we want to do a new after a battle, we don't need to ask the player the name again, but we can ask for a new character. 
+ 
+ ✦ Grid
+ 
+ - In the settings file, created a structure to predefine some grid sizes that the player will select, if none are selected, will generate a random based on the minimum and maximum size. If the list is increased, it will automatically adjust the options that the player has.
+ - Created new data structure files to acomodate those changes.

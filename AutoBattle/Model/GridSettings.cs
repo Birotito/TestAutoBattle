@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Microsoft.Extensions.Configuration;
 
 namespace AutoBattle.Model
@@ -32,6 +31,8 @@ namespace AutoBattle.Model
                 MaxYSize = Convert.ToInt32(configuration["MaxYSize"]);
                 MinXSize = Convert.ToInt32(configuration["MinXSize"]);
                 MaxXSize = Convert.ToInt32(configuration["MaxXSize"]);
+
+                PredefinedGridOptions = configuration.GetSection("PredefinedGridOptions").Get<List<PredefinedGridOptions>>();
             }
             catch (Exception ex)
             {
@@ -55,5 +56,6 @@ namespace AutoBattle.Model
         /// Maximum X Size from the battlefield
         /// </summary>
         public int MaxXSize { get; set; }
+        public List<PredefinedGridOptions> PredefinedGridOptions { get; set; }
     }
 }

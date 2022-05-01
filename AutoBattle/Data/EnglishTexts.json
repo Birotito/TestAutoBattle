@@ -1,0 +1,65 @@
+{
+  "GameOverText": [
+    { "TextMessage": "You Died!" },
+    { "TextMessage": "Want to try again?." }
+  ],
+  "NewGameText": {
+
+    "Introduction": [
+      {
+        "Message": "Welcome to Auto Battle!",
+        "ExhibitionOrder": 0
+      },
+      {
+        "Message": "A Hero that you choose will battle against another enemy hero until death in the battlefield.",
+        "ExhibitionOrder": 1
+      }
+    ],
+
+    "GetPlayerNameMessage": [
+      {
+        "Message": "First, let me know your name: ",
+        "InvalidInput": "I'm not sure I could understand that, can you tell it again?",
+        "ExhibitionOrder": "0"
+      }
+    ],
+
+    "BattlefieldIntroduction": [
+      {
+        "Message": "{0}? A name worthy of a champion!",
+        "ExhibitionOrder": 0
+      },
+      {
+        "Message": "Next, pickup a battlefield where the Hero you will choose and the Enemy will fight, no battlefield offers advantage or disadvantage, the only difference is their size.",
+        "ExhibitionOrder": 1
+      }
+    ],
+
+    "GetPlayerBattlefieldChoice": [
+      {
+        "Message": "Choose among options: ",
+        "InvalidInput": "I'm not sure I'm familiar with this place, choose another one",
+        "ExhibitionOrder": "0"
+      }
+    ],
+
+    "HeroIntroduction": [
+      {
+        "Message": "That's settle, now you need to choose a hero to represent you in the battlefield",
+        "ExhibitionOrder": "0"
+      },
+      {
+        "Message": "Take one among the list that you thing will bring you victory! Remember that your enemy will select one as well, so choose wisely",
+        "ExhibitionOrder": "1"
+      }
+    ],
+
+    "GetPlayerHeroChoice": [
+      {
+        "Message": "Choose among those great heroes: ",
+        "InvalidInput": "I'm pretty sure this person is indeed very powerful, but is not available so please stick with our selection for now and select one",
+        "ExhibitionOrder": "0"
+      }
+    ]
+  }
+}

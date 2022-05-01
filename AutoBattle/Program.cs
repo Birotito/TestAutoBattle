@@ -39,6 +39,7 @@ namespace AutoBattle
         private static void Setup()
         {
             GridSettings.Instance.Configure(new ConfigurationBuilder().AddJsonFile(settingsPath).Build().GetSection("GridSetting"));
+            MessageTextFileSettings.Instance.Configure(new ConfigurationBuilder().AddJsonFile(settingsPath).Build().GetSection("MessageTextFileSettings"));
         }
     }
 }

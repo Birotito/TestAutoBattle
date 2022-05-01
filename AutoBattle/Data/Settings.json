@@ -1,8 +1,29 @@
 {
   "GridSetting": {
-    "MinYSize": 0,
+    "MinYSize": 2,
     "MaxYSize": 10,
-    "MinXSize": 0,
-    "MaxXSize": 10
+    "MinXSize": 2,
+    "MaxXSize": 10,
+    "PredefinedGridOptions": [
+      {
+        "Name": "SmallGridSettings",
+        "YSize": 3,
+        "XSize": 3
+      },
+      {
+        "Name": "MediumGridSettings",
+        "YSize": 3,
+        "XSize": 5
+      },
+      {
+        "Name": "BigGridSettings",
+        "YSize": 5,
+        "XSize": 5
+      }
+    ]
+  },
+  "MessageTextFileSettings": {
+    "Language": "En-us",
+    "Path": "Data\\EnglishTexts.json"
   }
 }

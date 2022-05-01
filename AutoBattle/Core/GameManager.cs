@@ -7,6 +7,8 @@ using static AutoBattle.Grid;
 using System.Linq;
 using static AutoBattle.Types;
 using Random = AutoBattle.Core.Random;
+using AutoBattle.Game;
+using AutoBattle.Model;
 
 namespace AutoBattle.Core
 {
@@ -15,23 +17,40 @@ namespace AutoBattle.Core
     /// </summary>
     public static class GameManager
     {
+        public static CurrentGame M_CurrentGame { get; set; }
+
+        #region Private Behavior declaration
+        /// <summary>
+        /// Private Game Start Behavior Class
+        /// </summary>
+        private static IBehavior M_NewGame { get; set; }
+
+       
+        #endregion
+
         /// <summary>
         /// Entry point for the game. Since we don't have a load/save state, we go directly to new game, but in the future we can check before if we have a game before going to it.
         /// </summary>
         public static void StartGame()
         {
-            Console.WriteLine("New Game!:\n");
-        }
+            //Initialize the classes.
+            M_NewGame = new NewGame();
+            M_CurrentGame = new CurrentGame();
 
-        //Grid grid = new Grid(5, 5);
+            //Call New Game Start
+            M_NewGame.Start();
+
+#if DEBUG
+            Console.WriteLine("New Game!:\n");
+#endif
+
+        }
         //CharacterClass playerCharacterClass;
         //GridBox PlayerCurrentLocation;
         //GridBox EnemyCurrentLocation;
         //Character PlayerCharacter;
         //Character EnemyCharacter;
         //List<Character> AllPlayers = new List<Character>();
-        //int currentTurn = 0;
-        //int numberOfPossibleTiles = grid.grids.Count;
 
         //void GetPlayerChoice()
         //{
