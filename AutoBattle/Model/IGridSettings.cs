@@ -10,6 +10,7 @@ namespace AutoBattle.Model
         int MaxYSize { get; set; }
         int MinXSize { get; set; }
         int MaxXSize { get; set; }
+        string RandomGridName { get; set; }
         List<PredefinedGridOptions> PredefinedGridOptions { get; set; }
 
     }

@@ -25,7 +25,7 @@ namespace AutoBattle.Core
         /// Show messages in the console from within a list
         /// </summary>
         /// <param name="_messages">List containing the messages to be displayed</param>
-        public void ShowMessageToPlayer(List<TextMessage> _messages)
+        public void ShowMessageToPlayer(List<TextMessage> _messages, bool _shouldCleanScreen = true)
         {
             //TODO: Instead of showing the full message right away would be nice to show letter by letter being written.
 
@@ -33,7 +33,8 @@ namespace AutoBattle.Core
             _messages.OrderBy(x => x.ExhibitionOrder);
 
             //Always clean the console before sending new messages.
-            Console.Clear();
+            if (_shouldCleanScreen)
+                Console.Clear();
 
             //Show each one of the messages in the list, we wait for the "center" of the player to before proceeding to the next one. using for instead of foreach for a little performance gain.
             for (int i = 0; i < _messages.Count; i++)
@@ -48,7 +49,7 @@ namespace AutoBattle.Core
             }
         }
 
-        public void ShowMessageToPlayer(List<TextMessage> _messages, params object[] _messageArguments)
+        public void ShowMessageToPlayer(List<TextMessage> _messages, bool _shouldCleanScreen = true, params object[] _messageArguments)
         {
             //TODO: Instead of showing the full message right away would be nice to show letter by letter being written.
 
@@ -56,7 +57,8 @@ namespace AutoBattle.Core
             _messages.OrderBy(x => x.ExhibitionOrder);
 
             //Always clean the console before sending new messages.
-            Console.Clear();
+            if (_shouldCleanScreen)
+                Console.Clear();
 
             //Show each one of the messages in the list, we wait for the "center" of the player to before proceeding to the next one. using for instead of foreach for a little performance gain.
             for (int i = 0; i < _messages.Count; i++)
@@ -138,6 +140,79 @@ namespace AutoBattle.Core
 
             return returnInput;
         }
+
+        public dynamic GetMutipleChoiceInputFromPlayer<T>(List<PlayerInputMessage> _messages, List<T> _options)
+        {
+            //TODO: Instead of showing the full message right away would be nice to show letter by letter being written.
+            string returnInput = string.Empty;
+
+            //Reorder message list so we know for sure we are showing message in the intended order
+            _messages.OrderBy(x => x.ExhibitionOrder);
+
+            //Clean the console before sending new messages.
+            Console.Clear();
+
+
+            while (string.IsNullOrEmpty(returnInput))
+            {
+
+                //Show message to the player before asking for the input. using for instead of foreach for a little performance gain.
+                for (int i = 0; i < _messages.Count; i++)
+                {
+                    //Show message to the player in order.
+                    Console.WriteLine(_messages[i].Message + "\n");
+                }
+
+                //Prepare the options to be shown to the player
+                for (int i = 0; i < _options.Count; i++)
+                {
+                    Console.WriteLine(string.Format("[{0}] {1}", i, _options[i].GetType().GetProperty("Name").GetValue(_options[i])));
+                }
+
+                returnInput = Console.ReadLine();
+
+                //Check if the input was a number
+                if (int.TryParse(returnInput, out int n))
+                {
+                    //lets check if the input was a valid within our list
+                    if (_options.ElementAtOrDefault(n) != null)
+                        return _options[n];
+                }
+
+                //Not a valid input, lets clean the string.
+                returnInput = string.Empty;
+
+                //If the input is not valid (such as pressing enter with blank input) show the input error message and goes to ask again the information to the player.
+                if (string.IsNullOrEmpty(returnInput))
+                {
+                    Console.Clear();
+                    Console.WriteLine(_messages[0].InvalidInput + "\n");
+                }
+            }
+
+            return null;
+        }
+
+        // prints the matrix that indicates the tiles of the battlefield
+        public void DrawBattlefield(GridBox[] _gridBox, int M_xLenght)
+        {
+            Console.Clear();
+            for (int i = 0; i < _gridBox.Length; i++)
+            {
+                //TODO Maybe we can differentiate the player and enemy?
+                if (_gridBox[i].ocupied)
+                    Console.Write("[X]\t");
+                else
+                    Console.Write($"[ ]\t");
+
+                //End of the line, move to next one.
+                if (_gridBox[i].xIndex == (M_xLenght - 1))
+                    Console.Write(Environment.NewLine + Environment.NewLine);
+
+            }
+            Console.Write(Environment.NewLine + Environment.NewLine);
+        }
+
 
         /// <summary>
         /// Clean the last line write, mostly to clean "Press Enter to continue" message.

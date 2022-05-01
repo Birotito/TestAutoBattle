@@ -7,7 +7,7 @@ namespace AutoBattle.Model
     /// <summary>
     /// Responsible for holding information for texts in the newGame Class
     /// </summary>
-    public class NewGameText : INewGameText<TextMessage, PlayerInputMessage>
+    public struct NewGameText : INewGameText<TextMessage, PlayerInputMessage>
     {
         /// <summary>
         /// Text that will be shown at the beginning of the game

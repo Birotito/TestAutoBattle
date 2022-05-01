@@ -31,6 +31,7 @@ namespace AutoBattle.Model
                 MaxYSize = Convert.ToInt32(configuration["MaxYSize"]);
                 MinXSize = Convert.ToInt32(configuration["MinXSize"]);
                 MaxXSize = Convert.ToInt32(configuration["MaxXSize"]);
+                RandomGridName = configuration["RandomGridName"];
 
                 PredefinedGridOptions = configuration.GetSection("PredefinedGridOptions").Get<List<PredefinedGridOptions>>();
             }
@@ -56,6 +57,24 @@ namespace AutoBattle.Model
         /// Maximum X Size from the battlefield
         /// </summary>
         public int MaxXSize { get; set; }
+        /// <summary>
+        /// Name to be exhibit to the player when choosing a random grid. If no predefined grid exists on the setting file, this grid is automatically selected
+        /// </summary>
+        public string RandomGridName { get; set; }
+        /// <summary>
+        /// Loads the list of grids that exists on the settings file.
+        /// </summary>
         public List<PredefinedGridOptions> PredefinedGridOptions { get; set; }
+
+        public PredefinedGridOptions CreateRandomGridOption()
+        {
+
+            return new PredefinedGridOptions(
+                GridSettings.Instance.RandomGridName, //Name
+                Core.Random.Instance.Next(GridSettings.Instance.MinYSize, GridSettings.Instance.MaxYSize), //YSize
+                Core.Random.Instance.Next(GridSettings.Instance.MinXSize, GridSettings.Instance.MaxXSize) //XSize
+            )
+            { };
+        }
     }
 }

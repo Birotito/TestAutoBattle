@@ -28,7 +28,7 @@ namespace AutoBattle
             }
             catch (Exception ex)
             {
-                //TODO: would be nice to automaticly save a log file if we get an exception.
+                //TODO: would be nice to automatically save a log file if we get an exception.
                 throw ex;
             }
         }

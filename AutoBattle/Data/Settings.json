@@ -4,21 +4,22 @@
     "MaxYSize": 10,
     "MinXSize": 2,
     "MaxXSize": 10,
+    "RandomGridName": "Choose for me",
     "PredefinedGridOptions": [
       {
-        "Name": "SmallGridSettings",
+        "Name": "Small Battlefield",
         "YSize": 3,
+        "XSize": 1
+      },
+      {
+        "Name": "Medium Battlefield",
+        "YSize": 5,
         "XSize": 3
       },
       {
-        "Name": "MediumGridSettings",
-        "YSize": 3,
-        "XSize": 5
-      },
-      {
-        "Name": "BigGridSettings",
-        "YSize": 5,
-        "XSize": 5
+        "Name": "Big Battlefield",
+        "YSize": 7,
+        "XSize": 4
       }
     ]
   },

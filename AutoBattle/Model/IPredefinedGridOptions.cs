@@ -9,6 +9,5 @@ namespace AutoBattle.Model
         String Name { get; set; }
         int YSize { get; set; }
         int XSize { get; set; }
-
     }
 }

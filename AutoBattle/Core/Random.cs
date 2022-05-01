@@ -17,7 +17,7 @@ namespace AutoBattle.Core
         /// </summary>
         public static Random Instance { get { return lazy.Value; } }
 
-        public System.Random m_Random { get; set; }
+        private System.Random m_Random { get; set; }
 
         /// <summary>
         /// Construction with no parameter. GUID is used to not get a pseudo random.

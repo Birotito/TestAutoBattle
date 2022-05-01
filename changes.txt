@@ -1,5 +1,6 @@
 TODO: name convention
-
+TODO: tirar todos os warnings
+TODO: testar método popular grid na tela com diferente dimensões
 • Devlog (04/28)
 
 - Moved the command "grids.Add(newBox);" to be inside of the FOR. The project would not even be the way was before.
@@ -128,7 +129,21 @@ TODO: name convention
  - Player and enemy character could be a list to work like a team, but since the should is only 1x1 at this point, a single reference was made.
  - The Player name is stored in Character class and also here, which is not so good since we have the same information twice, but for me makes sense to keep this outside character, if we want to do a new after a battle, we don't need to ask the player the name again, but we can ask for a new character. 
  
- ✦ Grid
+✦ Grid
  
  - In the settings file, created a structure to predefine some grid sizes that the player will select, if none are selected, will generate a random based on the minimum and maximum size. If the list is increased, it will automatically adjust the options that the player has.
  - Created new data structure files to acomodate those changes.
+ - Created a new method in GridSettings singleton to return a new random option, this will be used if no predefined grid option existed in the settings file, also to create a new value in the list for the player to select
+ - Refactoring the class: originally the class was very messy, so I did a little refactoring to make this class with the same format as the one we changed.
+	.Moved from the root of the project to the more suitable Core folder and namespace. 
+	.Created a interface for it, for the reasons said above, and maintain convention.
+	.A new constructor was added to get information from the PredefinedGridOptions class, which will contains the information for the grid that the player selected. Another constructor was added with the properties, to help with unit tests creation and in case we ever need to create those without the class
+	.Moved out GridBox from Type to it's own class in the Model folder, with an interface. Just to be a little more clean, moved the bool occupied to the final of parameters in constructor and added as option, since most of the times this value will be false.
+	.With this we don't need the index propertie anymore, since the index will be the position in the array.
+	.Changed Grid and GridBox fields into properties.
+	.Array is lighter than a list, since we know the number of positions we will need when creating the grid and that will not change until a new game, makes sense to work with array to gain a little of memory consumption
+	.Moved the method to populate the GridBox to a private function, to avoid code repetition, simplified method and removed complex calculation to get the index, just a index int would sufice.
+	.Moved the method drawBattlefield to our PlayerMessageHandler that is responsible to write things to the player. The Grid class should only hold the information.
+	.Also refactored the method, since was creating a new GridBox to check if was occupied... That's makes no sense, since always would be false. New the method gets a GridBox list already filled as parameter and do a single for it, and the lenght of column and line as a paremter so we do a single if to know when to to next line.
+		
+	

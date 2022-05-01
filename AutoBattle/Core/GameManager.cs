@@ -1,12 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-using static AutoBattle.Character;
-using static AutoBattle.Grid;
-using System.Linq;
-using static AutoBattle.Types;
-using Random = AutoBattle.Core.Random;
 using AutoBattle.Game;
 using AutoBattle.Model;
 
