@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using AutoBattle.Core;
+﻿using AutoBattle.Core;
+using AutoBattle.Characters;
+using System;
 
 namespace AutoBattle.Model
 {
@@ -9,7 +8,7 @@ namespace AutoBattle.Model
     {
         public string PlayerName { get; set; }
         public Grid Grid { get; set; }
-        public int CurrentTurn { get; set; }
+        public Int16 CurrentTurn { get; set; }
         public Character PlayerCharacter { get; set; }
         public Character EnemyCharacter { get; set; }
     }

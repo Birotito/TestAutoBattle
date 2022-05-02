@@ -27,10 +27,10 @@ namespace AutoBattle.Model
             //TODO: Check the best way to handle error, or if a key was deleted from file.
             try
             {
-                MinYSize = Convert.ToInt32(configuration["MinYSize"]);
-                MaxYSize = Convert.ToInt32(configuration["MaxYSize"]);
-                MinXSize = Convert.ToInt32(configuration["MinXSize"]);
-                MaxXSize = Convert.ToInt32(configuration["MaxXSize"]);
+                MinYSize = Convert.ToSByte(configuration["MinYSize"]);
+                MaxYSize = Convert.ToSByte(configuration["MaxYSize"]);
+                MinXSize = Convert.ToSByte(configuration["MinXSize"]);
+                MaxXSize = Convert.ToSByte(configuration["MaxXSize"]);
                 RandomGridName = configuration["RandomGridName"];
 
                 PredefinedGridOptions = configuration.GetSection("PredefinedGridOptions").Get<List<PredefinedGridOptions>>();
@@ -44,19 +44,19 @@ namespace AutoBattle.Model
         /// <summary>
         /// Minimum Y Size from the battlefield
         /// </summary>
-        public int MinYSize { get; set; }
+        public sbyte MinYSize { get; set; }
         /// <summary>
         /// Maximum Y Size from the battlefield
         /// </summary>
-        public int MaxYSize { get; set; }
+        public sbyte MaxYSize { get; set; }
         /// <summary>
         /// Minimum Y Size from the battlefield
         /// </summary>
-        public int MinXSize { get; set; }
+        public sbyte MinXSize { get; set; }
         /// <summary>
         /// Maximum X Size from the battlefield
         /// </summary>
-        public int MaxXSize { get; set; }
+        public sbyte MaxXSize { get; set; }
         /// <summary>
         /// Name to be exhibit to the player when choosing a random grid. If no predefined grid exists on the setting file, this grid is automatically selected
         /// </summary>
@@ -68,13 +68,11 @@ namespace AutoBattle.Model
 
         public PredefinedGridOptions CreateRandomGridOption()
         {
-
-            return new PredefinedGridOptions(
-                GridSettings.Instance.RandomGridName, //Name
-                Core.Random.Instance.Next(GridSettings.Instance.MinYSize, GridSettings.Instance.MaxYSize), //YSize
-                Core.Random.Instance.Next(GridSettings.Instance.MinXSize, GridSettings.Instance.MaxXSize) //XSize
-            )
-            { };
+            return new PredefinedGridOptions() { 
+                Name = GridSettings.Instance.RandomGridName, //Name
+                YSize = Core.Random.Instance.Next(GridSettings.Instance.MinYSize, GridSettings.Instance.MaxYSize), //YSize
+                XSize = Core.Random.Instance.Next(GridSettings.Instance.MinXSize, GridSettings.Instance.MaxXSize) //XSize
+             };
         }
     }
 }

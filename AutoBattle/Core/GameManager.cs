@@ -31,86 +31,67 @@ namespace AutoBattle.Core
 
             //Call New Game Start
             M_NewGame.Start();
-
 #if DEBUG
             Console.WriteLine("New Game!:\n");
 #endif
 
+            //Get information from new game and feed it to currentgame class
+            NewGameSetupIntoCurrentGame((NewGame)M_NewGame);
+
+            //End NewGame class and clean instantiation
+            M_NewGame.End();
+            M_NewGame = null;
+
+            //Move to gameplay
         }
-        //CharacterClass playerCharacterClass;
-        //GridBox PlayerCurrentLocation;
-        //GridBox EnemyCurrentLocation;
-        //Character PlayerCharacter;
-        //Character EnemyCharacter;
-        //List<Character> AllPlayers = new List<Character>();
 
-        //void GetPlayerChoice()
-        //{
-        //    //asks for the player to choose between for possible classes via console.
-        //    Console.WriteLine("Choose Between One of this Classes:\n");
-        //    Console.WriteLine("[1] Paladin, [2] Warrior, [3] Cleric, [4] Archer");
-        //    //store the player choice in a variable
-        //    string choice = Console.ReadLine();
+        /// <summary>
+        /// Responsible for gameplay
+        /// </summary>
+        public static void Gameplay()
+        {
 
-        //    switch (choice)
-        //    {
-        //        case "1":
-        //            CreatePlayerCharacter(Int32.Parse(choice));
-        //            break;
-        //        case "2":
-        //            CreatePlayerCharacter(Int32.Parse(choice));
-        //            break;
-        //        case "3":
-        //            CreatePlayerCharacter(Int32.Parse(choice));
-        //            break;
-        //        case "4":
-        //            CreatePlayerCharacter(Int32.Parse(choice));
-        //            break;
-        //        default:
-        //            GetPlayerChoice();
-        //            break;
-        //    }
-        //}
+        }
 
-        //void CreatePlayerCharacter(int classIndex)
-        //{
+        /// <summary>
+        /// When the game end (a character dies) starts this behavior to show results
+        /// </summary>
+        public static void GameOver()
+        {
 
-        //    CharacterClass characterClass = (CharacterClass)classIndex;
-        //    Console.WriteLine($"Player Class Choice: {characterClass}");
-        //    PlayerCharacter = new Character(characterClass);
-        //    PlayerCharacter.Health = 100;
-        //    PlayerCharacter.BaseDamage = 20;
-        //    PlayerCharacter.PlayerIndex = 0;
+        }
 
-        //    CreateEnemyCharacter();
 
-        //}
+        /// <summary>
+        /// In case the player wants to try again, but differently from new game we don't need all the inputs from the player,we already know their name, and they can keep the same champion for example
+        /// </summary>
+        public static void TryAgain()
+        {
 
-        //void CreateEnemyCharacter()
-        //{
-        //    //randomly choose the enemy class and set up vital variables
-        //    int randomInteger = Random.Instance.Next(1, 4);
-        //    CharacterClass enemyClass = (CharacterClass)randomInteger;
-        //    Console.WriteLine($"Enemy Class Choice: {enemyClass}");
-        //    EnemyCharacter = new Character(enemyClass);
-        //    EnemyCharacter.Health = 100;
-        //    PlayerCharacter.BaseDamage = 20;
-        //    PlayerCharacter.PlayerIndex = 1;
-        //    StartGame();
+        }
 
-        //}
+        /// <summary>
+        /// Case the player wants to exit, we end the game and clean all instantiated objects
+        /// </summary>
+        public static void EndGame()
+        {
 
-        //void StartGame()
-        //{
-        //    //populates the character variables and targets
-        //    EnemyCharacter.Target = PlayerCharacter;
-        //    PlayerCharacter.Target = EnemyCharacter;
-        //    AllPlayers.Add(PlayerCharacter);
-        //    AllPlayers.Add(EnemyCharacter);
-        //    AlocatePlayers();
-        //    StartTurn();
+        }
 
-        //}
+        /// <summary>
+        /// Get information from the new created game into out current game property.
+        /// </summary>
+        /// <param name="_newGameSetup">Behavior that created the new game, can be a try again, load or new game</param>
+        private static void NewGameSetupIntoCurrentGame(NewGame _newGameSetup)
+        {
+            M_CurrentGame.CurrentTurn = 0;
+            M_CurrentGame.PlayerName = _newGameSetup.GetPlayerName();
+            M_CurrentGame.PlayerCharacter = _newGameSetup.GetPlayerCharacter();
+            M_CurrentGame.EnemyCharacter = _newGameSetup.GetEnemyCharacter();
+            M_CurrentGame.Grid = _newGameSetup.GetGrid();
+            
+        }
+
 
         //void StartTurn()
         //{

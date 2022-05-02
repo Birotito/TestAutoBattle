@@ -1,36 +1,43 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using AutoBattle.Core;
-using AutoBattle.Model;
-using static AutoBattle.Types;
 
-namespace AutoBattle
+namespace AutoBattle.Characters
 {
-    public class Character
+    public class Character : ICharacter
     {
-        public string Name { get; set; }
-        public float Health;
-        public float BaseDamage;
-        public float DamageMultiplier { get; set; }
-        public GridBox currentBox;
-        public int PlayerIndex;
-        public Character Target { get; set; } 
-        public Character(CharacterClass characterClass)
-        {
+        private string M_Name { get; set; }
+        private Int16 M_CurrentHealth { get; set; }
+        private Int16 M_CurrentDamage { get; set; }
+        private Int16 M_CurrentDamageMultiplier { get; set; }
+        private Int16 M_PlayerIndex { get; set; }
+        private ICharacterClass M_CurrentClass { get; set; }
+        private Character Target { get; set; } 
 
+
+        /// <summary>
+        /// Gets information from the selected class and use in the main character class. 
+        /// Everything that we need that is specific to the class (skills for example) if we need we get for the class.
+        /// </summary>
+        /// <param name="_characterClass">The selected class</param>
+        public Character(CharacterClass _characterClass)
+        {
+            this.M_Name = _characterClass.Name;
+            this.M_CurrentHealth = _characterClass.BaseHealth;
+            this.M_CurrentDamage = _characterClass.BaseDamage;
+            this.M_CurrentDamageMultiplier = _characterClass.DamageMultiplier;
         }
 
 
-        public bool TakeDamage(float amount)
+        /// <summary>
+        /// Character takes damage, check if is dead too.
+        /// </summary>
+        /// <param name="amount">Amount of damage that will be dealth to the character;</param>
+        public void TakeDamage(Int16 amount)
         {
-            if((Health -= BaseDamage) <= 0)
-            {
+            //It's ok if health goes bellow 0;
+            M_CurrentHealth -= amount;
+
+            if (M_CurrentHealth <= 0)
                 Die();
-                return true;
-            }
-            return false;
         }
 
         public void Die()
@@ -128,5 +135,10 @@ namespace AutoBattle
             //target.TakeDamage(rand.Next(0, (int)BaseDamage));
             //Console.WriteLine($"Player {PlayerIndex} is attacking the player {Target.PlayerIndex} and did {BaseDamage} damage\n");
         }
+
+        #region Return Private Fields Methods
+        public string GetCharacterName() => M_Name;
+
+        #endregion
     }
 }

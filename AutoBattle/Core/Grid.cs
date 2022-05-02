@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using static AutoBattle.Types;
 using AutoBattle.Model;
 
 namespace AutoBattle.Core
@@ -8,13 +6,13 @@ namespace AutoBattle.Core
     public class Grid : IGrid
     {
         public GridBox[] M_Grids { get; set; }
-        public int M_xLenght { get; set; }
-        public int M_yLength { get; set; }
+        public sbyte M_xLenght { get; set; }
+        public sbyte M_yLength { get; set; }
 
         public Grid(PredefinedGridOptions _GridOptions)
         {
-            this.M_xLenght = _GridOptions.XSize;
-            this.M_yLength = _GridOptions.YSize;
+            this.M_xLenght = Convert.ToSByte(_GridOptions.XSize);
+            this.M_yLength = Convert.ToSByte(_GridOptions.YSize);
 
             PopulateGridBox();
 
@@ -23,7 +21,7 @@ namespace AutoBattle.Core
 #endif
         }
 
-        public Grid(int _Lines, int _Columns)
+        public Grid(sbyte _Lines, sbyte _Columns)
         {
             this.M_xLenght = _Lines;
             this.M_yLength = _Columns;
@@ -37,14 +35,14 @@ namespace AutoBattle.Core
 
         private void PopulateGridBox()
         {
-            int index = 0;
+            sbyte index = 0;
             M_Grids = new GridBox[this.M_xLenght * this.M_yLength];
 
             //Line
-            for (int j = 0; j < this.M_yLength; j++)
+            for (sbyte j = 0; j < this.M_yLength; j++)
             {
                 //Column
-                for (int i = 0; i < this.M_xLenght; i++)
+                for (sbyte i = 0; i < this.M_xLenght; i++)
                 {
                     this.M_Grids[index] = new GridBox(i, j);
                     index++;

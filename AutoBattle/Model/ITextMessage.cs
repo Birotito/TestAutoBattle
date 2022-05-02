@@ -6,7 +6,7 @@ namespace AutoBattle.Model
 {
     public interface ITextMessage
     {
-        int ExhibitionOrder { get; set; }
+        sbyte ExhibitionOrder { get; set; }
         string Message { get; set; }
     }
 }

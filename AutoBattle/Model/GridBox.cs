@@ -6,15 +6,15 @@ namespace AutoBattle.Model
 {
     public struct GridBox : IGridBox
     {
-        public int xIndex {get; set;}
-        public int yIndex { get; set; }
+        public sbyte xIndex {get; set;}
+        public sbyte yIndex { get; set; }
         public bool ocupied { get; set; }
 
-        public GridBox(int x, int y, bool ocupied = false)
+        public GridBox(sbyte _x, sbyte _y, bool _ocupied = false)
         {
-            this.xIndex = x;
-            this.yIndex = y;
-            this.ocupied = ocupied;
+            this.xIndex = _x;
+            this.yIndex = _y;
+            this.ocupied = _ocupied;
         }
 
     }

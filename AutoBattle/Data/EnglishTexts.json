@@ -1,8 +1,5 @@
 {
-  "GameOverText": [
-    { "TextMessage": "You Died!" },
-    { "TextMessage": "Want to try again?." }
-  ],
+
   "NewGameText": {
 
     "Introduction": [
@@ -19,7 +16,7 @@
     "GetPlayerNameMessage": [
       {
         "Message": "First, let me know your name: ",
-        "InvalidInput": "I'm not sure I could understand that, can you tell it again?",
+        "InvalidInput": "I'm not sure I could understand that, can you tell it again?",|
         "ExhibitionOrder": "0"
       }
     ],
@@ -49,7 +46,7 @@
         "ExhibitionOrder": "0"
       },
       {
-        "Message": "Take one among the list that you thing will bring you victory! Remember that your enemy will select one as well, so choose wisely",
+        "Message": "Take one among the list that you think will bring you victory! Remember that your enemy will select one as well, so choose wisely",
         "ExhibitionOrder": "1"
       }
     ],
@@ -60,6 +57,91 @@
         "InvalidInput": "I'm pretty sure this person is indeed very powerful, but is not available so please stick with our selection for now and select one",
         "ExhibitionOrder": "0"
       }
+    ],
+
+    "FinalText": [
+      {
+        "Message": "{0}! That would be me choice too.",
+        "ExhibitionOrder": "0"
+      },
+      {
+        "Message": "Now the champions will be placed somewhere random in the battlefield, and then will search each other and start to fight! Good luck for your hero, and fare the well",
+        "ExhibitionOrder": "1"
+      }
+    ]
+  },
+
+  "GameplayText": {
+
+    "RoundStart": [
+      {
+        "Message": "This is the battlefield right now.",
+        "ExhibitionOrder": 0
+      },
+      {
+        "Message": "{0} Will go first",
+        "ExhibitionOrder": 1
+      }
+    ],
+
+    "CharacterMoved": [
+      {
+        "Message": "Enemy's {0} moved {1} tiles to {2}! /n {3}'S {4} moved {5} tiles to {6}!",
+        "ExhibitionOrder": 0
+      }
+    ],
+
+    "ReadyToAttack": [
+      {
+        "Message": "{0} is ready to attack next",
+        "ExhibitionOrder": 0
+      }
+    ],
+
+    "DamageDone": [
+      {
+        "Message": "{0} did {1} damage to {2}!",
+        "ExhibitionOrder": 0
+      }
+    ],
+
+    "CharacterDie": [
+      {
+        "Message": "With that hit {0} fell to the ground! What a battle!",
+        "ExhibitionOrder": 0
+      }
+    ]
+  },
+  "GameOverText": {
+
+    "PlayerWin": [
+      {
+        "Message": "Your champion emerged victorious, well done!",
+        "ExhibitionOrder": 0
+      }
+    ],
+
+    "EnemyWin": [
+      {
+        "Message": "Your enemy champion emerged victorious, such a disgrace",
+        "ExhibitionOrder": 0
+      }
+    ],
+
+    "PlayAgain": [
+      {
+        "Message": "Would you want to try it again?",
+        "InvalidInput": "Speak your mind clearly, otherwise I can't understand you",
+        "ExhibitionOrder": 0
+      }
+    ],
+
+    "EndGreetings": [
+      {
+        "Message": "That's enough then, see you on the battlefield another day!",
+        "ExhibitionOrder": 0
+      }
     ]
   }
+
 }

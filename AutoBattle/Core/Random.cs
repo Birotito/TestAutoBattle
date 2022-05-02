@@ -45,6 +45,36 @@ namespace AutoBattle.Core
         /// <returns>Return a random integer within the max and minimum value</returns>
         public int Next(int _MinNumber, int _MaxNumber) => m_Random.Next(_MinNumber, _MaxNumber);
 
+        /// <summary>
+        /// Encapsulates the random method with a maximum value
+        /// </summary>
+        /// <param name="_MaxNumber">The highest possible value that can be returned</param>
+        /// <returns>Return a random integer within the max value</returns>
+        public Int16 Next(Int16 _MaxNumber) => (Int16)m_Random.Next(_MaxNumber);
+
+        /// <summary>
+        /// Encapsulates the random method with a maximum value and minimum
+        /// </summary>
+        /// <param name="_MinNumber">The lowest possible value that can be returned</param>
+        /// <param name="_MaxNumber">The highest possible value that can be returned</param>
+        /// <returns>Return a random integer within the max and minimum value</returns>
+        public Int16 Next(Int16 _MinNumber, Int16 _MaxNumber) => (Int16)m_Random.Next(_MinNumber, _MaxNumber);
+
+        /// <summary>
+        /// Encapsulates the random method with a maximum value
+        /// </summary>
+        /// <param name="_MaxNumber">The highest possible value that can be returned</param>
+        /// <returns>Return a random integer within the max value</returns>
+        public sbyte Next(sbyte _MaxNumber) => (sbyte)m_Random.Next(_MaxNumber);
+
+        /// <summary>
+        /// Encapsulates the random method with a maximum value and minimum
+        /// </summary>
+        /// <param name="_MinNumber">The lowest possible value that can be returned</param>
+        /// <param name="_MaxNumber">The highest possible value that can be returned</param>
+        /// <returns>Return a random integer within the max and minimum value</returns>
+        public sbyte Next(sbyte _MinNumber, sbyte _MaxNumber) => (sbyte)m_Random.Next(_MinNumber, _MaxNumber);
+
 
     }
 }

@@ -6,10 +6,10 @@ namespace AutoBattle.Model
 {
     public interface IGridSettings : ISettings
     {
-        int MinYSize { get; set; }
-        int MaxYSize { get; set; }
-        int MinXSize { get; set; }
-        int MaxXSize { get; set; }
+        sbyte MinYSize { get; set; }
+        sbyte MaxYSize { get; set; }
+        sbyte MinXSize { get; set; }
+        sbyte MaxXSize { get; set; }
         string RandomGridName { get; set; }
         List<PredefinedGridOptions> PredefinedGridOptions { get; set; }
 

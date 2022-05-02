@@ -15,5 +15,7 @@ namespace AutoBattle.Model
         List<IPlayerInputMessage> GetPlayerBattlefieldChoice { get; set; } 
         List<ITextMessage> HeroIntroduction { get; set; }
         List<IPlayerInputMessage> GetPlayerHeroChoice { get; set; }
+        List<ITextMessage> FinalText { get; set; }
+        
     }
 }

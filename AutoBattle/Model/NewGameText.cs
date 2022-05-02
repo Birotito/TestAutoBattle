@@ -7,7 +7,7 @@ namespace AutoBattle.Model
     /// <summary>
     /// Responsible for holding information for texts in the newGame Class
     /// </summary>
-    public struct NewGameText : INewGameText<TextMessage, PlayerInputMessage>
+    public class NewGameText : INewGameText<TextMessage, PlayerInputMessage>
     {
         /// <summary>
         /// Text that will be shown at the beginning of the game
@@ -24,7 +24,7 @@ namespace AutoBattle.Model
         /// <summary>
         /// Battlefield options, if the player don't select one, we create one random.
         /// </summary>
-        public List<PlayerInputMessage> GetPlayerBattlefieldChoice{ get; set; } //TODO: change to be multiple options
+        public List<PlayerInputMessage> GetPlayerBattlefieldChoice{ get; set; }
         /// <summary>
         /// Explanation about the heroes to choose from.
         /// </summary>
@@ -33,6 +33,12 @@ namespace AutoBattle.Model
         /// Text for the player choose among the playable heroes.
         /// </summary>
         public List<PlayerInputMessage> GetPlayerHeroChoice { get; set; }
+        /// <summary>
+        /// Final text before the fight.
+        /// </summary>
+        public List<TextMessage> FinalText { get; set; }
+
+        
 
     }
 }

@@ -1,7 +1,16 @@
 TODO: name convention
 TODO: tirar todos os warnings
-TODO: testar método popular grid na tela com diferente dimensões
-• Devlog (04/28)
+
+Good practices:
+	Changed to Int16 instead of Int where I think we don't need all this value. This might generate a problem if the value is too big, but would be known better by playtesting.
+	Also the same with small values but changed to sbyte.
+	Maximum Grid size: Y: 127 X: 127
+	Maximum Messages in sequence: 127
+
+Things to consider:
+	Interfaces and abstraction patterns were chosen over single struct patterns to help with mutation and polymorphy, but it can be costlier for the game to run. So this can pattern can be revised if needed.
+
+Devlog:
 
 - Moved the command "grids.Add(newBox);" to be inside of the FOR. The project would not even be the way was before.
 - Moved console write information used for debugging to be inside #if DEBUG tag, this way the final player will not get those messages.
@@ -85,6 +94,7 @@ TODO: testar método popular grid na tela com diferente dimensões
 
 - When we are focused in create the core mechanics of the game we tend to be straight to the point, and often forget to input some gamification and fun features that the player will enjoy, so with that in mind the messages for the will the player will be rewritten to add a little more flavor and to be friendlier.
 - Also at the start of a new game, the game will briefly explain the rules to the player.
+- In the end 3 new behaviors was created to handle each task, Select Battlefield, GetPlayerName and Select Character, this way we break the responsibility to each class, also if we want to implement a try again, and only partially change those selections is easier.
 
 ✦ Texts
 
@@ -112,38 +122,94 @@ TODO: testar método popular grid na tela com diferente dimensões
 
 ✦ PlayerMessageHandler
 
-- Now we have the structure built with the texts to show to the player, but we still need someone to handle showing this in the corret manner, and getting the inputs when needed from the player, that's why we will create this class.
-- It will be called from the behavior when we need to show or get something to the player, this way the behavior is responsible to let this class know what needs to be exhibit on the screen throug the TextLoader object that has loaded.
-- We could create a class to handle writting and another to get the player input, but since our game is still very simply, we don't need this kind of complexity. To keep things simple as is needed is also something good.
-- Since we can show message to the player at almost evert time, makes sense to turn this class into a Singleton. 
+- Now we have the structure built with the texts to show to the player, but we still need someone to handle showing this in a correct manner, and getting the inputs when needed from the player, that's why we will create this class.
+- It will be called from the behavior when we need to show or get something to the player, this way the behavior is responsible to let this class know what needs to be exhibited on the screen through the TextLoader object has loaded.
+- We could create a class to handle writing and another to get the player input, but since our game is still very simple, we don't need this kind of complexity. To keep things simple as is needed is also something good.
+- Since we can show messages to the player almost every time, makes sense to turn this class into a Singleton. 
 - Added method to show messages from a list and get input (for the name).
-
+- Added a method to show messages during gameplay (such as player take X damage).
 
  ✦ CurrentGame
  
- - Until now, all the information needed for one game session such as Grid, PlayerCharacter, EnemyCharacter, Status, current play, position and so on was scarced around all the code, and each class was doing something with it in a very confusing manner.
- - This class will hold in a single access point all the information needed for one game session to be able to run. The information will be handled, providad and updated by each behaviour class that is responsible for something in the gameplay, but everyone will acess here in the same place.
- - Along with the GameManager that works as a hub to call each Behavior needed to the gameplay, here will be stored all the information needed to the gameplay, so make sense that the Game Manager hold the instance of this class and be responsible for it.
- - NewGame Class is responsible to fill what is needed for us to start the game, so the information that we are getting there from the player (Name, choosen character, grid information) will be stored here, also all that is needed to be automatically generated will be handled by that class and stored here.
- - Since this class is not supposed to have any logic in it, since will be handled be the game behaviors, it makes sense that this class is under Model folder and namespace, and like before, it will also have an interface to define the properties.
- - Player and enemy character could be a list to work like a team, but since the should is only 1x1 at this point, a single reference was made.
- - The Player name is stored in Character class and also here, which is not so good since we have the same information twice, but for me makes sense to keep this outside character, if we want to do a new after a battle, we don't need to ask the player the name again, but we can ask for a new character. 
+- Until now, all the information needed for one game session such as Grid, PlayerCharacter, EnemyCharacter, Status, current play, position, and so on was scarce around all the code, and each class was doing something with it in a very confusing manner.
+ - This class will hold in a single access point all the information needed for one game session to be able to run. The information will be handled, provided, and updated by each behavior class that is responsible for something in the gameplay, but everyone will access it here in the same place.
+ - Along with the GameManager that works as a hub to call each Behavior needed for the gameplay, here will be stored all the information needed for the gameplay, so make sense that the Game Manager hold the instance of this class and be responsible for it.
+ - NewGame Class is responsible to fill what is needed for us to start the game, so the information that we are getting there from the player (Name, chosen character, grid information) will be stored here, also all that is needed to be automatically generated will be handled by that class and stored here.
+ - Since this class is not supposed to have any logic in it since will be handled by the game behaviors, it makes sense that this class is under the Model folder and namespace, and like before, it will also have an interface to define the properties.
+ - Player and enemy character could be a list to work as a team, but since the should is only 1x1 at this point, a single reference was made.
+ - The Player name is stored in Character class and also here, which is not so good since we have the same information twice, but for me makes sense to keep this outside character, if we want to do a new one after a battle, we don't need to ask the player the name again, but we can ask for a new character. 
  
 ✦ Grid
  
  - In the settings file, created a structure to predefine some grid sizes that the player will select, if none are selected, will generate a random based on the minimum and maximum size. If the list is increased, it will automatically adjust the options that the player has.
- - Created new data structure files to acomodate those changes.
+ - Created new data structure files to accommodate those changes.
  - Created a new method in GridSettings singleton to return a new random option, this will be used if no predefined grid option existed in the settings file, also to create a new value in the list for the player to select
  - Refactoring the class: originally the class was very messy, so I did a little refactoring to make this class with the same format as the one we changed.
 	.Moved from the root of the project to the more suitable Core folder and namespace. 
-	.Created a interface for it, for the reasons said above, and maintain convention.
-	.A new constructor was added to get information from the PredefinedGridOptions class, which will contains the information for the grid that the player selected. Another constructor was added with the properties, to help with unit tests creation and in case we ever need to create those without the class
-	.Moved out GridBox from Type to it's own class in the Model folder, with an interface. Just to be a little more clean, moved the bool occupied to the final of parameters in constructor and added as option, since most of the times this value will be false.
-	.With this we don't need the index propertie anymore, since the index will be the position in the array.
+	.Created an interface for it, for the reasons said above, and maintain convention.
+	.A new constructor was added to get information from the PredefinedGridOptions class, which will contain the information for the grid that the player selected. Another constructor was added with the properties, to help with unit tests creation and in case we ever need to create those without the class
+	.Moved out GridBox from Type to its own class in the Model folder, with an interface. Just to be a little cleaner, moved the bool occupied to the final of parameters in the constructor and added it as an option, since most of the time this value will be false.
+	.With this we don't need the index properties anymore, since the index will be the position in the array.
 	.Changed Grid and GridBox fields into properties.
-	.Array is lighter than a list, since we know the number of positions we will need when creating the grid and that will not change until a new game, makes sense to work with array to gain a little of memory consumption
-	.Moved the method to populate the GridBox to a private function, to avoid code repetition, simplified method and removed complex calculation to get the index, just a index int would sufice.
+	.Array is lighter than a list since we know the number of positions we will need when creating the grid and that will not change until a new game, makes sense to work with an array to gain a little memory consumption
+	.Moved the method to populate the GridBox to a private function, to avoid code repetition, simplified the method, and removed complex calculations to get the index, just an index int would suffice.
 	.Moved the method drawBattlefield to our PlayerMessageHandler that is responsible to write things to the player. The Grid class should only hold the information.
-	.Also refactored the method, since was creating a new GridBox to check if was occupied... That's makes no sense, since always would be false. New the method gets a GridBox list already filled as parameter and do a single for it, and the lenght of column and line as a paremter so we do a single if to know when to to next line.
-		
+	.Also refactored the method, since was creating a new GridBox to check if was occupied... That makes no sense since always would be false. New the method gets a GridBox list already filled as a parameter and does a single for it, and the length of column and line as a parameter so we do a single if to know when to next line.
+	.Would be nice to differentiate the player from the enemy, will think that during playtesting
+ - There was a Grid.cs file in the folder of the solution doing nothing, so I deleted it.
+ 
+ ✦ Character
+ 
+ - The file that needs a lot of changes and refactoring. Let's go through a breakdown of it
+-Refactoring the class:
+	.We can have different character classes, each having a specific mechanic to them, but still, we have a lot of mechanics that are common, such as walk, die, attack (even though the attack CAN be different, but still all of the attacks)
+	.Makes total sense to use polymorphy and class abstraction here, having a common base abstract character class, and then each specific character class inert from it, do its own implementation and rules.
+	.If needed, we could even create an intermediate class for classes that share some common methods, like ranged characters, melee characters, but right now the game doesn't have this distinction so all characters will inert from the same base class, but would be very easy and painless to change in case the project became bigger.
+	.Like the pattern so far, we will use an interface for the character class, specially useful if we have problems with debugging in the future or want to implement new characters or automated tests.
+	.Each character has initial attributes such as health, damage, skills, and so on. So far I've been using JSON files to store data information, but here this method is not so interesting because we don't want this information easily accessible to the player, even if we minify and encrypt the JSON it's still easier to access compared to a structure compiled holding this information, so that's what we are gonna do.
+	.Each character class will have its class the base values that the character will use.
+		Note: the user still could access and change this information during runtime if used a program to change memory value (such as Cheat Engine), but this is way beyond the scope, so I think we can live with that.
+		IMP: since we want to keep this structure mutable and inheritable, and use an interface to hold the base fields, instead of a real structure will be used a class so we avoid boxing value which can impact performance.
+	.Character.cs from the root folder of the project was deleted.
+	.Also I think since this is one of the core features of the game, and we can add different characters, makes sense to create a new folder and namespace for them, so Characters namespace was created.
+	.Until now the classes were controlled via an enum in the Types file, since the changes above are made this enum is no longer necessary. It is indeed faster to look for the enum compared to the class structures, but it violates SOLID principle of reusability since we need to go there and change the value if a new character is added. If we face performance problems, this structure can be thought of, but since the game is still pretty simple, for me makes sense to not use this, so was deleted.
+	.Changed all fields to properties as been until now.
+	.In the character there was a currentBox and playerIndex. Since our Grid class has an array of GridBox, as long we hold the Index Array where this character is we don't need to hold any information from the GridBox, so it was removed. Also is lighter and cheaper to hold int value of the index compared to a whole structure.
+		Note: If we really wanted to squish memory consumption we could store this information in a sbyte instead of Int18, but then our Grid would be limited to 127 positions, right now we don't have this limitation, but could be thought in the future.
+	.The Health, Damage, and Damage Multiplier was a float type. We can work with decimal values for those but is more costly than working with integer values. For the scope of this project for me makes sense to gain a little of memory consumption by turning those into int
+	.Changed Health, BaseDamage, DamageMultiplier, and PlayerIndex to SmallIndex (Int16) since this type should be enough for what we are doing here, also changed the name of those properties to "Current", since the base values will be in each class.
+	.Added a character class property to the character class, so we can know which class we are in, and we can access specific functions in those classes that work only for a specific class.
+	.In the constructor of character we get the values that we need from the class, everything else that we need we get from the class.
+	.CharacterSkills struct was moved to outside generic Types class to its own class, along with a new folder and namespace
+		.I'm not implementing any gameplay with the skill so will be left as is, but this functionality needs to be revised before use, and be under the same patterns used in the project.
+	.TakeDamage was decreasing the health from the own character damage property instead of the amount, this makes no sense lol, so this method was refactored to use the amount passed as a parameter. Also the parameter type changed to small int to save memory.
+	.Die method was doing nothing, will be refactored to be displayed during gameplay.
+	.WalkTO is doing nothing, makes sense to put the logic here to try to find the enemy player and move to it, will be refactored to do so.
+	.StartTurn method should not be here. In the new structure created, behavior will be responsible for each turn, and this behavior then will call the methods inside the character, so this method is moved out from the character.
+	.CheckCloseTargets was refactored to something more performative, now checks if can attack the enemy, if not, calls method walksTo to get closer to the enemy, but if in range, method attack instead.
+	.Attack was not taking into consideration M_CurrentDamageMultiplier value, also the calculation for the damage was kinda strange. Now use the base value for the attack, multiply by the multiplier, and then gets a random value that can be 20% lower or higher than the base value.
+		.the 20% variation value was an arbitrary one, can go into the settings file or be changed into a new logic (maybe a status inside each class?)
+	.Properties set to private, no outside class should change those values, on the methods inside this class.		
+	
+
+  ✦ Types
+	-With the changes made above, the "Types" file is no longer needed, since is empty, so is now deleted.
+	-We no longer have any .cs file outside any folder structure now.
+	-Also we don't have anymore any use with the static call to the type like before, so a good thing also.
+	
+ ✦ Back to GameManager
+ 
+	-Added messages for gameplay and endgame to out settings file.
+	-Back to our game manager, let's implement the behavior past new game point (finally some action!)
+	-First let's get all the setup new game did and pass it to our current game property
+	-Create all methods that we will need, Gameplay, GameOver, TryAgain and EndGame
+	-Refactoring:
+		.With the changes made until now, we no long need all those variables that were declared before directly into the Program.cs.
+		.Also the method GetPlayerChoice is no longer needed, now we dynamically gets the information we need, also all our texts are provided from a JSON file to be easier to edit externally, and we can even easily now add a localization process 
+		.Methods CreatePlayerCharacter, CreateEnemyCharacter and StartGame are also handled with everything we did so far and are also no longer needed.
+		.We also added a bunch of inputs from the player easily with the new system, such as getting it's name, the size of the battlefield and the class to play, also with the new dynamic system we can easy override those inputs and get a random/default value without breaking the game.
+		.And of course, it's pretty easy now to add new inputs and settings, for example we could use a save/load feature with everything implemented, we just need something to take care to save from our classes into a JSON file, or even rouds between the fights, ou fights with teams.
+	-Created new game behaviors.
+	
+
 	
