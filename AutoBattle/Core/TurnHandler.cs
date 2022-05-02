@@ -40,7 +40,7 @@ namespace AutoBattle.Core
         {
             short currentPlayerTurnIndex = M_CurrentPlayerTurn;
             GridBox? targetPosition;
-            
+
 
             //Check if can attack 
             if (M_PlayingCharacters[currentPlayerTurnIndex].CheckCloseTargets(M_Grid, out targetPosition))
@@ -118,7 +118,13 @@ namespace AutoBattle.Core
 
         public void End()
         {
-          
+            //Cleans resources so GC can free memory space.
+            M_TextLoader = null;
+            M_PlayingCharacters = null;
+            M_Grid = null;
+            M_CurrentPlayerTurn = 0;
+            M_CurrentTurn = 0;
+            M_NumberPlayers = 0;
         }
 
 

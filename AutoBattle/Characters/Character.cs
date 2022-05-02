@@ -15,7 +15,7 @@ namespace AutoBattle.Characters
         private Int16 M_PlayerIndex { get; set; }
         private ICharacterClass M_CurrentClass { get; set; }
         public bool M_isPlayerCharacter { get; set; }
-        public bool M_IsDead { get; set; }
+        private bool M_IsDead { get; set; }
 
         /// <summary>
         /// Gets information from the selected class and use in the main character class. 

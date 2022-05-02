@@ -1,5 +1,3 @@
-TODO: name convention
-TODO: tirar todos os warnings
 
 Good practices:
 	Changed to Int16 instead of Int where I think we don't need all this value. This might generate a problem if the value is too big, but would be known better by playtesting.
@@ -246,3 +244,13 @@ Devlog:
             //Checks if someone is dead, if so, we returns false ending the gameplay.
 			
 	- With this we moved all the old methods to the new structure, and now are doing a properly gameplay.
+	
+✦ GameOver
+	-Shows the result of the battle.
+	-Also should asked the player if wanted to play again, and then Game manager would reset the game, Unfortunately there will be no time to implement that
+	
+✦ EndGame
+
+	-Show a end message to the player and finish the game.
+	
+	

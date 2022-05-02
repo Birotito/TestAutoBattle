@@ -17,7 +17,8 @@ namespace AutoBattle.Core
         private static IBehavior M_NewGame { get; set; }
         private static IBehavior M_PlaceCharactersInGrid { get; set; }
         private static ITurn M_TurnHandler { get; set; }
-
+        private static IBehavior M_GameOver { get; set; }
+        private static IBehavior M_EndGame { get; set; }
 
         #endregion
 
@@ -63,8 +64,8 @@ namespace AutoBattle.Core
             M_TurnHandler = new TurnHandler(new List<Character>() { M_CurrentGame.PlayerCharacter, M_CurrentGame.EnemyCharacter }, M_CurrentGame.Grid);
             M_TurnHandler.Start();
 
-            while (!M_TurnHandler.DoTurn())
-            {
+            while (M_TurnHandler.DoTurn()) { 
+
                 //Update informations that happened in the turn
                 UpdateAfterTurn((TurnHandler)M_TurnHandler);
             }
@@ -81,7 +82,14 @@ namespace AutoBattle.Core
         /// </summary>
         public static void GameOver()
         {
+            //Show the result of the game
+            M_GameOver = new GameOver(M_CurrentGame.PlayerCharacter.GetCharacterIsDead() ? M_CurrentGame.PlayerCharacter : M_CurrentGame.EnemyCharacter);
+            M_GameOver.Start();
+            M_GameOver.End();
+            M_GameOver = null;
 
+            //If we got a positive message from game over we would go to try again.Unfortunately there will be no time to implement that
+            EndGame();
         }
 
 
@@ -90,14 +98,18 @@ namespace AutoBattle.Core
         /// </summary>
         public static void TryAgain()
         {
-
+            //If after game over player wants to play again, we can start from here.
         }
 
         /// <summary>
         /// Case the player wants to exit, we end the game and clean all instantiated objects
         /// </summary>
         public static void EndGame()
-        {
+        {   //Show the result of the game
+            M_EndGame = new EndGame();
+            M_EndGame.Start();
+            M_EndGame.End();
+            M_EndGame = null;
 
         }
 
@@ -129,33 +141,6 @@ namespace AutoBattle.Core
             M_CurrentGame.EnemyCharacter = _turnHandler.GetEnemmyCharcter();
             M_CurrentGame.CurrentTurn = _turnHandler.GetCurrentTurn();
         }
-
-        //void HandleTurn()
-        //{
-        //    if (PlayerCharacter.Health == 0)
-        //    {
-        //        return;
-        //    }
-        //    else if (EnemyCharacter.Health == 0)
-        //    {
-        //        Console.Write(Environment.NewLine + Environment.NewLine);
-
-        //        // endgame?
-
-        //        Console.Write(Environment.NewLine + Environment.NewLine);
-
-        //        return;
-        //    }
-        //    else
-        //    {
-        //        Console.Write(Environment.NewLine + Environment.NewLine);
-        //        Console.WriteLine("Click on any key to start the next turn...\n");
-        //        Console.Write(Environment.NewLine + Environment.NewLine);
-
-        //        ConsoleKeyInfo key = Console.ReadKey();
-        //        StartTurn();
-        //    }
-        //}
        
     }
 }
