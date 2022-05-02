@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using AutoBattle.Characters;
 using AutoBattle.Game;
 using AutoBattle.Model;
 
@@ -12,12 +14,11 @@ namespace AutoBattle.Core
         public static CurrentGame M_CurrentGame { get; set; }
 
         #region Private Behavior declaration
-        /// <summary>
-        /// Private Game Start Behavior Class
-        /// </summary>
         private static IBehavior M_NewGame { get; set; }
+        private static IBehavior M_PlaceCharactersInGrid { get; set; }
+        private static ITurn M_TurnHandler { get; set; }
 
-       
+
         #endregion
 
         /// <summary>
@@ -43,6 +44,7 @@ namespace AutoBattle.Core
             M_NewGame = null;
 
             //Move to gameplay
+            Gameplay();
         }
 
         /// <summary>
@@ -50,6 +52,27 @@ namespace AutoBattle.Core
         /// </summary>
         public static void Gameplay()
         {
+            //Place the characters in the grid.
+            M_PlaceCharactersInGrid = new PlaceCharactersInGrid(M_CurrentGame.Grid, new List<Character>() { M_CurrentGame.PlayerCharacter, M_CurrentGame.EnemyCharacter });
+            M_PlaceCharactersInGrid.Start();
+            GetCharactersPosition((PlaceCharactersInGrid)M_PlaceCharactersInGrid);
+            M_PlaceCharactersInGrid.End();
+            M_PlaceCharactersInGrid = null;
+
+            //Play Turns
+            M_TurnHandler = new TurnHandler(new List<Character>() { M_CurrentGame.PlayerCharacter, M_CurrentGame.EnemyCharacter }, M_CurrentGame.Grid);
+            M_TurnHandler.Start();
+
+            while (!M_TurnHandler.DoTurn())
+            {
+                //Update informations that happened in the turn
+                UpdateAfterTurn((TurnHandler)M_TurnHandler);
+            }
+            M_TurnHandler.End();
+            M_TurnHandler = null;
+
+            //Game finished.
+            GameOver();
 
         }
 
@@ -92,23 +115,20 @@ namespace AutoBattle.Core
             
         }
 
+        private static void GetCharactersPosition(PlaceCharactersInGrid _placeToGrid)
+        {
+            M_CurrentGame.Grid = _placeToGrid.GetGrid();
+            M_CurrentGame.PlayerCharacter = _placeToGrid.GetPlayerCharcter();
+            M_CurrentGame.EnemyCharacter = _placeToGrid.GetEnemmyCharcter();
+        }
 
-        //void StartTurn()
-        //{
-
-        //    if (currentTurn == 0)
-        //    {
-        //        //AllPlayers.Sort();  
-        //    }
-
-        //    foreach (Character character in AllPlayers)
-        //    {
-        //        character.StartTurn(grid);
-        //    }
-
-        //    currentTurn++;
-        //    HandleTurn();
-        //}
+        private static void UpdateAfterTurn(TurnHandler _turnHandler)
+        {
+            M_CurrentGame.Grid = _turnHandler.GetGrid();
+            M_CurrentGame.PlayerCharacter = _turnHandler.GetPlayerCharcter();
+            M_CurrentGame.EnemyCharacter = _turnHandler.GetEnemmyCharcter();
+            M_CurrentGame.CurrentTurn = _turnHandler.GetCurrentTurn();
+        }
 
         //void HandleTurn()
         //{
@@ -136,49 +156,6 @@ namespace AutoBattle.Core
         //        StartTurn();
         //    }
         //}
-
-        //void AlocatePlayers()
-        //{
-        //    AlocatePlayerCharacter();
-
-        //}
-
-        //void AlocatePlayerCharacter()
-        //{
-        //    int random = 0;
-        //    GridBox RandomLocation = (grid.grids.ElementAt(random));
-        //    Console.Write($"{random}\n");
-        //    if (!RandomLocation.ocupied)
-        //    {
-        //        GridBox PlayerCurrentLocation = RandomLocation;
-        //        RandomLocation.ocupied = true;
-        //        grid.grids[random] = RandomLocation;
-        //        PlayerCharacter.currentBox = grid.grids[random];
-        //        AlocateEnemyCharacter();
-        //    }
-        //    else
-        //    {
-        //        AlocatePlayerCharacter();
-        //    }
-        //}
-
-        //void AlocateEnemyCharacter()
-        //{
-        //    int random = 24;
-        //    GridBox RandomLocation = (grid.grids.ElementAt(random));
-        //    Console.Write($"{random}\n");
-        //    if (!RandomLocation.ocupied)
-        //    {
-        //        EnemyCurrentLocation = RandomLocation;
-        //        RandomLocation.ocupied = true;
-        //        grid.grids[random] = RandomLocation;
-        //        EnemyCharacter.currentBox = grid.grids[random];
-        //        grid.drawBattlefield(5, 5);
-        //    }
-        //    else
-        //    {
-        //        AlocateEnemyCharacter();
-        //    }
-        //}
+       
     }
 }

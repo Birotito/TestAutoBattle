@@ -8,14 +8,17 @@ namespace AutoBattle.Model
     {
         public sbyte xIndex {get; set;}
         public sbyte yIndex { get; set; }
-        public bool ocupied { get; set; }
-
+        public bool occupied { get; set; }
         public GridBox(sbyte _x, sbyte _y, bool _ocupied = false)
         {
             this.xIndex = _x;
             this.yIndex = _y;
-            this.ocupied = _ocupied;
+            this.occupied = _ocupied;
         }
+
+        public void OccupyBox() => occupied = true;
+
+        public void VacateBox() => occupied = false;
 
     }
 }

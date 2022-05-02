@@ -73,6 +73,37 @@ namespace AutoBattle.Core
             }
         }
 
+        /// <summary>
+        /// Show messages in the console from within a list and don't wait for it1s input
+        /// </summary>
+        /// <param name="_messages">List containing the messages to be displayed</param>
+        public void ShowGameplayMessageToPlayer(List<TextMessage> _messages)
+        {
+            //Reorder message list so we know for sure we are showing message in the intended order
+            _messages.OrderBy(x => x.ExhibitionOrder);
+
+            
+            //Show each one of the messages in the list, we wait for the "center" of the player to before proceeding to the next one. using for instead of foreach for a little performance gain.
+            for (int i = 0; i < _messages.Count; i++)
+            {
+                //Show message to the player in order.
+                Console.WriteLine(_messages[i].Message + "\n");
+            }
+        }
+
+        public void ShowGameplayMessageToPlayer(List<TextMessage> _messages, params object[] _messageArguments)
+        {
+            //Reorder message list so we know for sure we are showing message in the intended order
+            _messages.OrderBy(x => x.ExhibitionOrder);
+
+            //Show each one of the messages in the list, we wait for the "center" of the player to before proceeding to the next one. using for instead of foreach for a little performance gain.
+            for (int i = 0; i < _messages.Count; i++)
+            {
+                //Show message to the player in order.
+                Console.WriteLine(String.Format(_messages[i].Message + "\n", _messageArguments));
+            }
+        }
+
         public string GetInputFromPlayer(List<PlayerInputMessage> _messages)
         {
             //TODO: Instead of showing the full message right away would be nice to show letter by letter being written.
@@ -194,25 +225,88 @@ namespace AutoBattle.Core
         }
 
         // prints the matrix that indicates the tiles of the battlefield
-        public void DrawBattlefield(GridBox[] _gridBox, int M_xLenght)
+        public void DrawBattlefield(GridBox[] _gridBox, short _xLenght)
         {
             Console.Clear();
             for (int i = 0; i < _gridBox.Length; i++)
             {
-                //TODO Maybe we can differentiate the player and enemy?
-                if (_gridBox[i].ocupied)
+                if (_gridBox[i].occupied)
                     Console.Write("[X]\t");
                 else
                     Console.Write($"[ ]\t");
 
                 //End of the line, move to next one.
-                if (_gridBox[i].xIndex == (M_xLenght - 1))
+                if (_gridBox[i].xIndex == (_xLenght - 1))
                     Console.Write(Environment.NewLine + Environment.NewLine);
 
             }
             Console.Write(Environment.NewLine + Environment.NewLine);
         }
 
+        // prints the matrix that indicates the tiles of the battlefield and paint in green the player position
+        public void DrawBattlefield(GridBox[] _gridBox, short _xLenght, short _playerPosition)
+        {
+            Console.Clear();
+            for (int i = 0; i < _gridBox.Length; i++)
+            {
+                Console.ResetColor();
+
+                if (i == _playerPosition)
+                    Console.BackgroundColor = ConsoleColor.Green;
+
+                if (_gridBox[i].occupied)
+                    Console.Write("[X]\t");
+                else
+                    Console.Write($"[ ]\t");
+
+                //End of the line, move to next one.
+                if (_gridBox[i].xIndex == (_xLenght - 1))
+                    Console.Write(Environment.NewLine + Environment.NewLine);
+
+            }
+            Console.Write(Environment.NewLine + Environment.NewLine);
+        }
+
+        // prints the matrix that indicates the tiles of the battlefield and paint in green the player position and red the enemy position
+        public void DrawBattlefield(GridBox[] _gridBox, short _xLenght, short _playerPosition, short _enemyPosition, bool _shoudlClean = true)
+        {
+            if (_shoudlClean)
+                Console.Clear();
+
+            for (int i = 0; i < _gridBox.Length; i++)
+            {
+                Console.ResetColor();
+
+                if (i == _playerPosition)
+                    Console.BackgroundColor = ConsoleColor.Green;
+                else if (i == _enemyPosition)
+                    Console.BackgroundColor = ConsoleColor.Red;
+
+                if (_gridBox[i].occupied)
+                    Console.Write("[X]\t");
+                else
+                    Console.Write($"[ ]\t");
+
+                //End of the line, move to next one.
+                if (_gridBox[i].xIndex == (_xLenght - 1))
+                    Console.Write(Environment.NewLine + Environment.NewLine);
+
+            }
+            Console.Write(Environment.NewLine + Environment.NewLine);
+        }
+
+        public void EndTurn()
+        {
+            Console.WriteLine("Press Enter to continue");
+            Console.ReadKey();
+            Console.SetCursorPosition(0, Console.CursorTop - 1);
+            ClearCurrentConsoleLine();
+        }
+
+        public void StartTurn()
+        {
+            Console.Clear();
+        }
 
         /// <summary>
         /// Clean the last line write, mostly to clean "Press Enter to continue" message.

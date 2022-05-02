@@ -16,7 +16,7 @@
     "GetPlayerNameMessage": [
       {
         "Message": "First, let me know your name: ",
-        "InvalidInput": "I'm not sure I could understand that, can you tell it again?",|
+        "InvalidInput": "I'm not sure I could understand that, can you tell it again?",
         "ExhibitionOrder": "0"
       }
     ],
@@ -75,25 +75,25 @@
 
     "RoundStart": [
       {
-        "Message": "This is the battlefield right now.",
+        "Message": "This is the battlefield right now. Your champion is green, and the enemy is red.",
         "ExhibitionOrder": 0
       },
       {
-        "Message": "{0} Will go first",
+        "Message": "{0} will go first",
         "ExhibitionOrder": 1
       }
     ],
 
     "CharacterMoved": [
       {
-        "Message": "Enemy's {0} moved {1} tiles to {2}! /n {3}'S {4} moved {5} tiles to {6}!",
+        "Message": "{0}'s moved closer to the other champion!",
         "ExhibitionOrder": 0
       }
     ],
 
     "ReadyToAttack": [
       {
-        "Message": "{0} is ready to attack next",
+        "Message": "{0} is ready to attack",
         "ExhibitionOrder": 0
       }
     ],

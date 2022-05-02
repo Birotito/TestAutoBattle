@@ -7,4 +7,5 @@ namespace AutoBattle.Characters
     public interface ICharacter
     {
     }
+
 }

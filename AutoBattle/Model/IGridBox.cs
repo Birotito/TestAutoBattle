@@ -5,6 +5,8 @@ namespace AutoBattle.Model
     {
         sbyte xIndex { get; set; }
         sbyte yIndex { get; set; }
-        bool ocupied { get; set; }
+        bool occupied { get; set; }
+        void OccupyBox();
+        void VacateBox();
     }
 }

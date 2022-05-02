@@ -128,6 +128,7 @@ Devlog:
 - Since we can show messages to the player almost every time, makes sense to turn this class into a Singleton. 
 - Added method to show messages from a list and get input (for the name).
 - Added a method to show messages during gameplay (such as player take X damage).
+- Added different methods do paint the Grid so we can see the player and enemy in red and green.
 
  ✦ CurrentGame
  
@@ -190,7 +191,8 @@ Devlog:
 	.Attack was not taking into consideration M_CurrentDamageMultiplier value, also the calculation for the damage was kinda strange. Now use the base value for the attack, multiply by the multiplier, and then gets a random value that can be 20% lower or higher than the base value.
 		.the 20% variation value was an arbitrary one, can go into the settings file or be changed into a new logic (maybe a status inside each class?)
 	.Properties set to private, no outside class should change those values, on the methods inside this class.		
-	
+	.Added a new bool property to know if this character belongs to the player.
+	.Created a new method inside random to calculate the damage, while doing the variation.
 
   ✦ Types
 	-With the changes made above, the "Types" file is no longer needed, since is empty, so is now deleted.
@@ -211,5 +213,36 @@ Devlog:
 		.And of course, it's pretty easy now to add new inputs and settings, for example we could use a save/load feature with everything implemented, we just need something to take care to save from our classes into a JSON file, or even rouds between the fights, ou fights with teams.
 	-Created new game behaviors.
 	
-
+✦ PlaceCharactersInGrid
 	
+	-New behavior to place all or selected characters somewhere in the Grid. 
+	-Following the single responsibility principle we need to have a class to take care of that, instead of nesting this responsibility into another class.
+	-Right now the game is only 1x1, but if the game started to work with multiple characters per team, this behavior could be easily changed to adress that.
+	-As property this class has the Grid, so it knows where to place everything and also check the boolean inside each GridBox that now has something in it.
+	-Also a list with all the characters that needs to the places (like said before, we don't care if right now we are working with team or single character).
+	-The constructior receives all the property values needed.
+	-Method Find Available places: We can only place something if the Grid Box is free, the class cannot assume everything will be empty since it should not care when is called.
+		.The method gets all GridBox inside the grid available and creates a new internal list. Since we are going to remove every time we place something from the list, a list better than an array. 
+		.In the end the method is costly since uses a lot of Linq, it can be further optimized in the future
+		.To return the player and enemy character we are getting the 0 and 1 position, this is not good, but for now will work. Needs to be changed in the future to return each team.
+
+
+✦ TurnHandler
+
+	-Handles each turn, increasing the turn value, making characters move and attack.
+	-After each turn returns to Game Manager that will update the current game property with the values generated here.
+	-Until the game ends, game manager calls the method next turns.
+	-If is the player turn, after the turn ends it will show in the screen what is happenning.
+	-has the property currentPlayerTurn to control who turn is it. 0 the player and 1 the PC, the values is settled randomly in the start method, and then changed between.
+	-If we had more teams, we could use this property to know who turn it was, we just needed to know to number max of player.
+	-Also a list of characters so we can do things with them during the turn. 
+	-Creation of new interface for turns inheriting from behavior so we can declare the method 	DoTurn
+	-DoTurn method will go as follow //Check if can attack
+
+            //If Is close enought Attacks
+
+            //If not move close to the enemy
+
+            //Checks if someone is dead, if so, we returns false ending the gameplay.
+			
+	- With this we moved all the old methods to the new structure, and now are doing a properly gameplay.

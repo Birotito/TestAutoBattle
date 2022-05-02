@@ -22,7 +22,7 @@ namespace AutoBattle.Core
         /// <summary>
         /// Construction with no parameter. GUID is used to not get a pseudo random.
         /// </summary>
-        private Random() => m_Random = new System.Random(Guid.NewGuid().GetHashCode());
+        private Random() => m_Random = new System.Random(Environment.TickCount);
 
         /// <summary>
         /// Encapsulates the random method
@@ -75,6 +75,16 @@ namespace AutoBattle.Core
         /// <returns>Return a random integer within the max and minimum value</returns>
         public sbyte Next(sbyte _MinNumber, sbyte _MaxNumber) => (sbyte)m_Random.Next(_MinNumber, _MaxNumber);
 
+        /// <summary>
+        /// Does damage with a random variation of 20%
+        /// </summary>
+        /// <param name="_baseDamage">Base Damage</param>
+        /// <returns>The damage output with the variation.</returns>
+        public short CalculateDamage(short _baseDamage)
+        {
+            short variation = (short)Math.Ceiling(_baseDamage * 0.2);
 
+            return (short)m_Random.Next(_baseDamage - variation, _baseDamage + variation);
+        }
     }
 }

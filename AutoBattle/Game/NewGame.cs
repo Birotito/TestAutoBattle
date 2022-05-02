@@ -60,8 +60,8 @@ namespace AutoBattle.Game
 
             SelectCharacters charSelection = new SelectCharacters(M_TextLoader.Messages.HeroIntroduction, M_TextLoader.Messages.GetPlayerHeroChoice);
             charSelection.Start();
-            M_PlayerCharacter = new Character(charSelection.M_PlayerCharacter);
-            M_EnemyCharacter = new Character(charSelection.M_EnemyCharacter);
+            M_PlayerCharacter = new Character(charSelection.M_PlayerCharacter, true);
+            M_EnemyCharacter = new Character(charSelection.M_EnemyCharacter, false);
             charSelection.End();
             charSelection = null;
             #endregion
